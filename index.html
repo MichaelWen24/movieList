@@ -6,8 +6,56 @@
     <title>Movies</title>
 </head>
 <body>
-    
+    <div class="page-title" id="page-title">
+        <div class="title-label" id="title-label">
+            <label class="home-label" id="home-label">HOME</label>
+            <label class="liked-label" id="liked-label">LIKED LIST</label>
+        </div>
+        <select class="movie-selector" id="movie-selector">
+            <option value="popular">Popular</option>
+            <option value="now-playing">Now playing</option>
+            <option value="top-rated">Top Rated</option>
+            <option value="upcoming">Upcoming</option>
+        </select>
+        <div class="page-label" id="page-label">
+            <label class="prev" id="prev">Prev</label>
+            <label class="page-counter" id="page-counter"></label>
+            <label class="next" id="next">Next</label>
+        </div>
+    </div>
+    <div class="movies-page" id="movies-page">
+        <!-- <img class="movie-img" src="https://image.tmdb.org/t/p/w500/2Tc1P3Ac8M479naPp1kYT3izLS5.png"/> -->
+        <!-- <div class="movie-container">
+            <img class="movie-img" src=""/>
+            <h3 class="movie-name"></h3>
+            <div class="movie-icon">
+                <ion-icon name="star"></ion-icon>
+                <label class="vote"></label>
+                <ion-icon name="heart-empty"></ion-icon>
+            </div>
+        </div> -->
+    </div>
+    <div class="details-page" id="details-page">
+        <!-- <img class="detail-img" src=""/>
+        <div class="details-conatiner">
+            <h3 class="detail-movie-name"></h3>
+            <h4 class="overview">overview</h4>
+            <span class="description"></span>
+            <h4 class="genres">Genres</h4>
+            <div class="genres-container">
+                <label class="genre-label"></label>
+            </div>
+            <h4 class="rating-title">Rating</h4>
+            <span class="rating"></span>
+            <h4 class="companies">Production Companies</h4>
+            <div class="companies-img">
+                <img class="company" src="" />
+            </div>
+        </div> -->
+    </div>
 
-    <script srt = "script.js"></script>
+    <script src = "script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
