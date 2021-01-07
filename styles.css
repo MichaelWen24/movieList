@@ -10,14 +10,118 @@
   }
 
   body {
-    margin: 30px;
+    margin: 60px;
     /* display: flex;
-    align-items: center;
+    /* align-items: center; */
+    /* justify-content: center;
+    padding: 4rem;   */ 
     justify-content: center;
-    padding: 4rem;   */
+  }
+  
+  .page-title {
+    margin-left: 20px;
+  }
+
+  .title-label {
+    display: flex;
+    align-items: center;
   }
 
    .logo {
-    width:80px;
-    height: 80px;
+    width:100px;
+    height: 100px;
   }
+
+  .home-label {
+    margin-left: 40px;
+    font-size: 25px;
+  }
+
+  .liked-label {
+    margin-left: 30px;
+    font-size: 25px;
+  }
+
+  .page-label {
+    display: flex;
+    justify-content:center;
+    align-content: center;
+    align-items: center;
+  }
+
+  .prev {
+    margin-right: 150px;
+    width: 50px;
+    height: 40px;
+    border: solid 1px rgb(1, 180, 228);
+    border-radius: 5px;
+    font-size: large;
+    display: flex;
+    align-items: center;
+    justify-content: center;   
+    color: rgb(1, 180, 228);
+  }
+
+  .next {
+    margin-left: 150px;
+    width: 50px;
+    height: 40px;
+    border: solid 1px rgb(1, 180, 228);
+    border-radius: 5px;
+    font-size: large;
+    display: flex;
+    align-items: center;
+    justify-content: center;   
+    color: rgb(1, 180, 228);
+  }
+
+  .page-counter {
+    font-size: large;
+  }
+
+  .movies-page {
+    position: relative;
+    margin-top: 30px;
+    /* width: 80vw; */
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-column-gap: 30px;
+    grid-row-gap: 40px;
+    justify-items: center;
+    align-items: center;
+  }
+
+  .movie-img {
+    height: 480px;
+    width: 318px; 
+  }
+  
+  .movie-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .details-page {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .detail-img {
+    height: 480px;
+    width: 318px;  
+  }
+
+  .details-container {
+    display: flex;
+    
+    flex-direction: column;
+  }
+
+  .company {
+    width: 20px;
+    height: 20px;
+  }
+

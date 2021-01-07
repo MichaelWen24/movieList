@@ -20,14 +20,15 @@ const model = {
     page: 0,
     total_pages: 0,
     total_results: 0,
-    genres: []
+    // genres: [],
+    likedMovies: []
 };
 
 // Controllers
 
-function fetchMovies(type, page){
+function fetchMovies(){
     // fetch(`${baseUrl}${type}?api_key=f7b946d6ee4e6d5684eae0ca10ca98e4&page=${page}`)
-    fetch(popularMoviesUrl)
+    return fetch(popularMoviesUrl)
     .then((resp) => {
         if (resp.ok){
             return resp.json();
@@ -41,29 +42,29 @@ function fetchMovies(type, page){
         model.page = data.page;
         model.total_pages = data.total_pages;
         model.total_results = data.total_results;
-        console.log(model);
+        // console.log(model);
     });
 }
 
-function fetchGenres() {
-    fetch(genresUrl)
-    .then((resp) => {
-        if (resp.ok){
-            return resp.json();
-        }
-        else {
-            console.log("Genres fetching error");
-        }
-    })
-    .then((data) => {  
-        model.genres = data
-    });
-}
+// function fetchGenres() {
+//     return fetch(genresUrl)
+//     .then((resp) => {
+//         if (resp.ok){
+//             return resp.json();
+//         }
+//         else {
+//             console.log("Genres fetching error");
+//         }
+//     })
+//     .then((data) => {  
+//         model.genres = data
+//     });
+// }
 
-function fetchCompanies(id) {
+function fetchDetails(id) {
     const detailUrl = `${baseUrl}${id}?api_key=f7b946d6ee4e6d5684eae0ca10ca98e4`;
 
-    fetch(detailUrl)
+    return fetch(detailUrl)
     .then((resp) => {
         if (resp.ok){
             return resp.json();
@@ -73,22 +74,48 @@ function fetchCompanies(id) {
         }
     })
     .then((data) => {
-        return data.production_companies;
+        return data;
     });
 }
 
-function getGenre(genre_id) {
-    model.genres.find((genre) => {
-        if(genre.id === genre_id){
-            return genre.name;
-        }
-    });
+// function getGenre(genre_id) {
+//     model.genres.find((genre) => {
+//         if(genre.id === genre_id){
+//             return genre.name;
+//         }
+//     });
+// }
+
+function fetchCompanies() {
+    return 
 }
 
 // Views
 
-function updateView() {
+function createMoviePage(movies) {
+    if(movies && movies.length > 0) {
+        const moviesPage = document.querySelector(".movies-page");
+        moviesPage.innerHTML = "";
+        movies.forEach((movie) => {
+            console.log(movie);
+            const movieContainer = createMovie(movie);
+            moviesPage.appendChild(movieContainer);
+        });
+    }
+    else {
+        console.log("Error while updating Movies page")
+    }
+}
 
+function upadteMoviesPage() {
+    const promise = fetchMovies();
+    promise.then(() => {
+       createMoviePage(model.movies);
+    });
+}
+
+function updateView() {
+    upadteMoviesPage();
 }
 
 function createMovie(movie) {
@@ -108,75 +135,89 @@ function createMovie(movie) {
 }
 
 function fillDetails(id) {
-    const movie = model.movies.find((movie) => movie.id === id);
-    const detailsContainer = document.querySelector(".details_page");
-    detailsContainer.id = id;
+    const detailsPage = document.querySelector(".details-page");
+    const detailsPromise = fetchDetails(id);
+    detailsPromise
+    .then((movie) => {
+        console.log(movie);
+        detailsPage.id = id;
 
-    const image = `<img class="detail-img" src="${imageUrl}${movie.poster_path}"/>`;
-    detailsContainer.appendChild(image);
+        const imageDiv = document.createElement("div");
+        const image = `<img class="detail-img" src="${imageUrl}${movie.poster_path}"/>`;
+        imageDiv.innerHTML = image;
+    
+        const detailsContainer = document.createElement("div");
+        detailsContainer.className = "details-conatiner";
+    
+        const title = document.createElement("h3");
+        title.innerText = movie.title;
+        title.className = "etail-movie-name";
+    
+        const overview = document.createElement("h4");
+        overview.textContent = "Overview";
+        overview.className = "overview";
+    
+        const description = document.createElement("span");
+        description.className = "description";
+        description.textContent = movie.overview;
+    
+        const genres = document.createElement("h4");
+        genres.className = "genres";
+        genres.textContent = "Genres";
+    
+        const genresContainer = document.createElement("div");
+        genresContainer.className = "genres-container";
+        movie.genres.forEach((genre) => {
+            const genreLabel= document.createElement("label");
+            genreLabel.className = "genre-label";
+            genreLabel.textContent = genre.name;
+            genresContainer.appendChild(genreLabel);
+        });
+    
+        const ratingTitle = document.createElement("h4");
+        ratingTitle.className = "rating-title";
+        ratingTitle.textContent = "Rating";
+    
+        const ratingContent = document.createElement("span");
+        ratingContent.className = "rating";
+        ratingContent.textContent = movie.vote_average;
+    
+        const companies = document.createElement("h4");
+        companies.className = "companies";
+        companies.textContent = "Production Companies";
+    
+        // const companiesArray = fetchCompanies(id);
+        const companyContainer = document.createElement("div");
+        companyContainer.className = "companies-img";
+        companyContainer.innerHTML = ""
+        movie.production_companies.forEach((company) => {
+            if(company.logo_path !== null) {
+                const innerHTML = `
+                <img class="company" src="${imageUrl}${company.logo_path}" />`;
+                companyContainer.innerHTML = `${companyContainer.innerHTML}\n ${innerHTML}`;
+            }
+        });
 
-    const detailsDiv = document.createElement("div");
-    detailsDiv.className = "details-conatiner";
+        detailsContainer.appendChild(title);
+        detailsContainer.appendChild(overview);
+        detailsContainer.appendChild(description);
+        detailsContainer.appendChild(genres);
+        detailsContainer.appendChild(genresContainer);
+        detailsContainer.appendChild(ratingTitle);
+        detailsContainer.appendChild(ratingContent);
+        detailsContainer.appendChild(companies);
+        detailsContainer.appendChild(companyContainer);
 
-    const title = document.createElement("h3");
-    title.innerText = movie.title;
-    title.className = "etail-movie-name";
-
-    const overview = document.createElement("h4");
-    overview.textContent = "Overview";
-    overview.className = "overview";
-
-    const description = document.createElement("span");
-    description.className = "description";
-    description.textContent = movie.overview;
-
-    const genres = document.createElement("h4");
-    genres.className = "genres";
-    genres.textContent = "Genres";
-
-    const genresContainer = document.createElement("div");
-    genresContainer.className = "genres-container";
-    movie.genre_ids.forEach((genreId) => {
-        const genreLabel= document.createElement("label");
-        genreLabel.className = "genre-label";
-        genreLabel.textContent = getGenre(genreId);
-        genresContainer.appendChild(genreLabel);
-    });
-
-    const ratingTitle = document.createElement("h4");
-    ratingTitle.className = "rating-title";
-    ratingTitle.textContent = "Rating";
-
-    const ratingContent = document.createElement("span");
-    ratingContent.className = "rating";
-    ratingContent.textContent = movie.vote_average;
-
-    const companies = document.createElement("h4");
-    companies.className = "companies";
-    companies.textContent = "Production Companies";
-
-    const companiesArray = fetchCompanies(id);
-    const companyContainer = document.createElement("div");
-    companyContainer.className = "companies-img";
-    companiesArray.forEach((company) => {
-        const innerHTML = `
-        <img class="company" src="${imageUrl}${company.logo_path}" />`;
-        companyContainer.appendChild(innerHTML);
-    });
-
-    detailsContainer.appendChild(image);
-    detailsContainer.appendChild(detailsDiv);
-    detailsContainer.appendChild(title);
-    detailsContainer.appendChild(overview);
-    detailsContainer.appendChild(description);
-    detailsContainer.appendChild(genres);
-    detailsContainer.appendChild(genresContainer);
-    detailsContainer.appendChild(ratingTitle);
-    detailsContainer.appendChild(ratingContent);
-    detailsContainer.appendChild(companies);
-    detailsContainer.appendChild(companyContainer);
+        detailsPage.appendChild(imageDiv);
+        detailsPage.appendChild(detailsContainer);
+        
+    });   
 }
 
 
-fetchGenres();
-fetchMovies(popularMoviesUrl);
+const loadEvent = () => {
+    updateView();
+    fillDetails(464052);
+}
+
+loadEvent();
