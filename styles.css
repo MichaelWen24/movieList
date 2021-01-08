@@ -92,15 +92,32 @@
   }
 
   .movie-img {
-    height: 480px;
-    width: 318px; 
+    height: 450px;
+    width: 300px; 
   }
   
   .movie-container {
+    width: 300px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-shadow: inset 0px 0px 2px 1px grey;
+  }
+
+  .movie-icon {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .star-vote {
+    margin-left: 5px;
+  }
+
+  .heart {
+    margin-right: 5px;
   }
 
   .details-page {
@@ -110,13 +127,12 @@
   }
 
   .detail-img {
-    height: 480px;
-    width: 318px;  
+    height: 450px;
+    width: 300px; 
   }
 
   .details-container {
     display: flex;
-    
     flex-direction: column;
   }
 
