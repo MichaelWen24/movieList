@@ -79,13 +79,13 @@ function fetchDetails(id) {
     });
 }
 
-function getGenre(genre_id) {
-    model.genres.find((genre) => {
-        if(genre.id === genre_id){
-            return genre.name;
-        }
-    });
-}
+// function getGenre(genre_id) {
+//     model.genres.find((genre) => {
+//         if(genre.id === genre_id){
+//             return genre.name;
+//         }
+//     });
+// }
 
 function prevPage() {
     let page = model.current_page;
@@ -169,7 +169,7 @@ function createMovie(movie) {
         <h3 class="movie-name">${movie.title}</h3>
         <div class="movie-icon">
             <div class="star-vote">
-                <ion-icon name="star"></ion-icon>
+                <ion-icon class="star" name="star"></ion-icon>
                 <label class="vote">${movie.vote_average}</label>
             </div>
             <div class="heart">
@@ -184,6 +184,8 @@ function createMovie(movie) {
 
 function fillDetails(id) {
     const detailsPage = document.querySelector(".details-page");
+    detailsPage.innerHTML  = "";
+
     const detailsPromise = fetchDetails(id);
     detailsPromise
     .then((movie) => {
@@ -195,7 +197,7 @@ function fillDetails(id) {
         imageDiv.innerHTML = image;
     
         const detailsContainer = document.createElement("div");
-        detailsContainer.className = "details-conatiner";
+        detailsContainer.className = "details-container";
     
         const title = document.createElement("h3");
         title.innerText = movie.title;
@@ -269,11 +271,19 @@ function getSelectorValue() {
 
 function getMovieId(e) {
     const target = e.target.closest(".movie-container");
-    console.log(target);
-    if (target.classList.contains("movie-img") || target.classList.contains("movie-name")) {
-        console.log(target);
-        const movie = target.parentNode;
-        console.log(movie);
+    const detailsPage = document.querySelector(".details-page");
+    const moviesPage = document.querySelector(".movies-page");
+    
+    if (target !== null){
+        const movieId = target.id;
+        fillDetails(movieId);
+        detailsPage.style.visibility = "visible";
+        moviesPage.style.opacity = "0.4";
+    } 
+    else {
+        detailsPage.innerHTML  = "";
+        detailsPage.style.visibility = "hidden";
+        moviesPage.style.opacity = "1";
     }
 }
 
@@ -348,14 +358,15 @@ function updateView() {
 }
 
 const loadEvent = () => {
-    if(model.movies.length === 0){
-        updateView();
-    }
-
+    const detailsPage = document.querySelector(".details-page");
     const movieCategory = document.querySelector(".movie-selector");
     const page = document.querySelector(".page-label");
     const movieDiv = document.querySelector(".movies-page");
-    
+
+    if(model.movies.length === 0){
+        updateView();
+        detailsPage.style.visibility = "hidden";
+    }
     movieCategory.addEventListener("change", () => {
         model.current_page = 1;
         updateView();
