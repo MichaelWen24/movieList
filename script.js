@@ -1,11 +1,3 @@
-const popularMoviesUrl = `https://api.themoviedb.org/3/movie/popular?api_key=f7b946d6ee4e6d5684eae0ca10ca98e4&page=1`; //https://api.themoviedb.org/3/movie/popular?api_key=f7b946d6ee4e6d5684eae0ca10ca98e4, 500 pages
-
-const nowPlayingMoviesUrl = `https://api.themoviedb.org/3/movie/now_playing?api_key=f7b946d6ee4e6d5684eae0ca10ca98e4&page=1`; //https://api.themoviedb.org/3/movie/now_playing?api_key=f7b946d6ee4e6d5684eae0ca10ca98e4, 58 pages
-
-const topRatedMoviesUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=f7b946d6ee4e6d5684eae0ca10ca98e4&page=1`; //https://api.themoviedb.org/3/movie/top_rated?api_key=f7b946d6ee4e6d5684eae0ca10ca98e4, 410 pages
-
-const upComingMoviesUrl = `https://api.themoviedb.org/3/movie/upcoming?api_key=f7b946d6ee4e6d5684eae0ca10ca98e4&page=1`; //https://api.themoviedb.org/3/movie/upcoming?api_key=f7b946d6ee4e6d5684eae0ca10ca98e4, 10 pages
-
 // MODEL
 
 const baseUrl = "https://api.themoviedb.org/3/movie/";
@@ -109,6 +101,17 @@ function nextPage() {
     }
 }
 
+function addLike(movie) {
+    model.likedMovies.push(movie);
+}
+
+function removeLike(id) {
+    const newLikes = model.likedMovies.filter((movie) => {
+        return movie.id !== id;
+    });
+    model.likedMovies = newLikes;
+}
+
 // Views
 
 function createMoviePage(movies) {
@@ -199,9 +202,9 @@ function fillDetails(id) {
         const detailsContainer = document.createElement("div");
         detailsContainer.className = "details-container";
     
-        const title = document.createElement("h3");
+        const title = document.createElement("h2");
         title.innerText = movie.title;
-        title.className = "etail-movie-name";
+        title.className = "detail-movie-name";
     
         const overview = document.createElement("h4");
         overview.textContent = "Overview";

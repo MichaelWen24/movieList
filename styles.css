@@ -172,8 +172,24 @@
     padding-right: 20px;
   }
 
+  .detail-movie-name {
+    margin-bottom: 10px;
+  }
+
+   .overview, .description, .genres, .genres-container, .rating-title, .rating, .companies {
+    margin-bottom: 3px;
+  }
+
+  .genre-label {
+    color: white;
+    background-color:rgb(144, 206,161) ;
+    margin: 5px;
+    border-radius: 5px;
+  }
+
   .company {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
   }
 
