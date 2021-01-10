@@ -17,6 +17,7 @@
     padding: 4rem;   */ 
     justify-content: center;
     position: relative;
+    color: rgb(13, 37, 63)
   }
   
   .page-title {
@@ -27,6 +28,45 @@
   .title-label {
     display: flex;
     align-items: center;
+
+  }
+
+  .home-label, .liked-label{
+
+    color: rgb(13, 37, 63);
+  }
+
+  .home-label:hover, .liked-label:hover{
+    color: rgb(1, 180, 228);
+    transition: 0.3s;
+  }
+
+  .home-label::after {
+    display: block;
+    content: "";
+    height: 5px;
+    background-color: transparent;  
+  }
+
+  .liked-label::after {
+    display: block;
+    content: "";
+    height: 5px;
+    background-color: transparent;  
+  }
+
+  .home-label-active::after {
+    display: block;
+    content: "";
+    height: 5px;
+    background-color: rgb(1, 180, 228);  
+  }
+
+  .liked-label-active::after {
+    display: block;
+    content: "";
+    height: 5px;
+    background-color: rgb(1, 180, 228);  
   }
 
    .logo {
@@ -144,6 +184,15 @@
 
   .heart {
     margin-right: 5px;
+  }
+
+  .heart-empty {
+    display: block;
+  }
+
+  .heart-filled {
+    display: none;
+    color: red;
   }
 
   .details-page {

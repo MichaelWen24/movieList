@@ -101,18 +101,71 @@ function nextPage() {
     }
 }
 
-function addLike(movie) {
+function getMovie(id) {
+    let result = [];
+    model.movies.find((movie) => {
+        if (movie.id == id){
+            result = movie;
+        }
+    });
+    return result;
+}
+
+function addToLike(movie) {
     model.likedMovies.push(movie);
+    console.log(model.likedMovies);
 }
 
 function removeLike(id) {
-    const newLikes = model.likedMovies.filter((movie) => {
-        return movie.id !== id;
+    const newLikes = model.likedMovies.filter( (movie) => {
+        return movie.id != id;
     });
+    console.log("new liked list", newLikes)
     model.likedMovies = newLikes;
+    console.log("remove list",model.likedMovies);
 }
 
 // Views
+
+function createMovieDiv(movie) {
+    const movieDiv = document.createElement("div");
+    movieDiv.className = "movie-container";
+    movieDiv.id = movie.id;
+    let innerHtml = "";
+    if (movie.poster_path !== null) {
+        innerHtml = `
+        <img class="movie-img" src="${imageUrl}${movie.poster_path}"/>
+        <h3 class="movie-name">${movie.title}</h3>
+        <div class="movie-icon">
+            <div class="star-vote">
+                <ion-icon name="star"></ion-icon>
+                <label class="vote">${movie.vote_average}</label>
+            </div>
+            <div class="heart">
+                <ion-icon class="heart-empty" name="heart-empty"></ion-icon>
+                <ion-icon class="heart-filled" name="heart"></ion-icon>
+            </div>
+        </div>`;
+    }
+    else{
+        innerHtml = `
+        <img class="movie-img" src="https://t4.ftcdn.net/jpg/02/07/87/79/360_F_207877921_BtG6ZKAVvtLyc5GWpBNEIlIxsffTtWkv.jpg"/>
+        <h3 class="movie-name">${movie.title}</h3>
+        <div class="movie-icon">
+            <div class="star-vote">
+                <ion-icon class="star" name="star"></ion-icon>
+                <label class="vote">${movie.vote_average}</label>
+            </div>
+            <div class="heart">
+                <ion-icon class="heart-empty" name="heart-empty"></ion-icon>
+                <ion-icon class="heart-filled" name="heart"></ion-icon>
+            </div>
+        </div>`;
+    }
+
+    movieDiv.innerHTML = innerHtml;
+    return movieDiv;
+}
 
 function createMoviePage(movies) {
     if(movies && movies.length > 0) {
@@ -120,7 +173,7 @@ function createMoviePage(movies) {
         moviesPage.innerHTML = "";
         movies.forEach((movie) => {
             // if (movie !== null) {
-            const movieContainer = createMovie(movie);
+            const movieContainer = createMovieDiv(movie);
             moviesPage.appendChild(movieContainer);
             // }
         });
@@ -145,44 +198,6 @@ function upadteMoviesPage() {
         counter.textContent = `${model.current_page} / ${model.total_pages}`;
        createMoviePage(model.movies);
     });
-}
-
-function createMovie(movie) {
-    const movieDiv = document.createElement("div");
-    movieDiv.className = "movie-container";
-    movieDiv.id = movie.id;
-    let innerHtml = "";
-    if (movie.poster_path !== null) {
-        innerHtml = `
-        <img class="movie-img" src="${imageUrl}${movie.poster_path}"/>
-        <h3 class="movie-name">${movie.title}</h3>
-        <div class="movie-icon">
-            <div class="star-vote">
-                <ion-icon name="star"></ion-icon>
-                <label class="vote">${movie.vote_average}</label>
-            </div>
-            <div class="heart">
-                <ion-icon name="heart-empty"></ion-icon>
-            </div>
-        </div>`;
-    }
-    else{
-        innerHtml = `
-        <img class="movie-img" src="https://t4.ftcdn.net/jpg/02/07/87/79/360_F_207877921_BtG6ZKAVvtLyc5GWpBNEIlIxsffTtWkv.jpg"/>
-        <h3 class="movie-name">${movie.title}</h3>
-        <div class="movie-icon">
-            <div class="star-vote">
-                <ion-icon class="star" name="star"></ion-icon>
-                <label class="vote">${movie.vote_average}</label>
-            </div>
-            <div class="heart">
-                <ion-icon name="heart-empty"></ion-icon>
-            </div>
-        </div>`;
-    }
-
-    movieDiv.innerHTML = innerHtml;
-    return movieDiv;
 }
 
 function fillDetails(id) {
@@ -272,13 +287,14 @@ function getSelectorValue() {
     return category;
 }
 
-function getMovieId(e) {
-    const target = e.target.closest(".movie-container");
+function updateDetailsPage(e) {
+    const target = e.target.closest(".movie-img");
     const detailsPage = document.querySelector(".details-page");
     const moviesPage = document.querySelector(".movies-page");
     
     if (target !== null){
-        const movieId = target.id;
+        const movieContainer = target.parentNode;
+        const movieId = movieContainer.id;
         fillDetails(movieId);
         detailsPage.style.visibility = "visible";
         moviesPage.style.opacity = "0.4";
@@ -356,6 +372,54 @@ function updatePage(e) {
 //     return value;
 // }
 
+function handleLikeIcon(e) {
+    const target = e.target.closest(".heart");
+    if (target !== null) {
+        const movieContainer = target.parentNode.parentNode;
+        const movieId = movieContainer.id;
+        const movie = getMovie(movieId);
+        const emptyHeart = document.querySelector("heart-empty");
+        const exist = model.likedMovies.some((likedMovie) => {
+            if(likedMovie.id == movieId){
+                return true;
+            }
+            else {
+                return false;
+            }
+        });
+
+        if (model.likedMovies.length === 0){ 
+            addToLike(movie);
+        }
+        else if (!exist){
+            addToLike(movie);
+        }
+        else {
+            removeLike(movieId);   
+        }
+    }
+}
+
+function handlePageTitle(e) {
+    const target = e.target;
+    const moviePage = document.querySelector(".movies-page");
+    const homeLabel = document.querySelector(".home-label");
+    const likedLabel = document.querySelector(".liked-label");
+
+    if (target.classList.contains("home-label")) {
+        homeLabel.classList.add("home-label-active");
+        likedLabel.classList.remove("liked-label-active");
+        updateView();
+    }
+    if (target.classList.contains("liked-label")) {
+        console.log(target);
+        homeLabel.classList.remove("home-label-active");
+        likedLabel.classList.add("liked-label-active");
+        moviePage.innerHTML = "";
+        createMoviePage(model.likedMovies);
+    }
+}
+
 function updateView() {
     upadteMoviesPage();
 }
@@ -365,18 +429,21 @@ const loadEvent = () => {
     const movieCategory = document.querySelector(".movie-selector");
     const page = document.querySelector(".page-label");
     const movieDiv = document.querySelector(".movies-page");
+    const pageTitle = document.querySelector(".page-title");
+    
 
     if(model.movies.length === 0){
         updateView();
         detailsPage.style.visibility = "hidden";
     }
+    pageTitle.addEventListener("click", handlePageTitle);
     movieCategory.addEventListener("change", () => {
         model.current_page = 1;
         updateView();
     });
     page.addEventListener("click", updatePage);
-    movieDiv.addEventListener("click", getMovieId);
-    
+    movieDiv.addEventListener("click", updateDetailsPage);
+    movieDiv.addEventListener("click", handleLikeIcon);
 }
 
 loadEvent();
