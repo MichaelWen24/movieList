@@ -378,7 +378,8 @@ function handleLikeIcon(e) {
         const movieContainer = target.parentNode.parentNode;
         const movieId = movieContainer.id;
         const movie = getMovie(movieId);
-        const emptyHeart = document.querySelector("heart-empty");
+        const emptyHeart = document.querySelector(".heart-empty");
+        const filledHeart = document.querySelector(".heart-filled")
         const exist = model.likedMovies.some((likedMovie) => {
             if(likedMovie.id == movieId){
                 return true;
@@ -405,14 +406,21 @@ function handlePageTitle(e) {
     const moviePage = document.querySelector(".movies-page");
     const homeLabel = document.querySelector(".home-label");
     const likedLabel = document.querySelector(".liked-label");
+    const movieSelector = document.querySelector(".movie-selector");
+    const pageLabel = document.querySelector(".page-label");
 
     if (target.classList.contains("home-label")) {
         homeLabel.classList.add("home-label-active");
         likedLabel.classList.remove("liked-label-active");
+        movieSelector.style.visibility = "visible";
+        pageLabel.style.visibility = "visible";
         updateView();
     }
     if (target.classList.contains("liked-label")) {
         console.log(target);
+
+        movieSelector.style.visibility = "hidden";
+        pageLabel.style.visibility = "hidden";
         homeLabel.classList.remove("home-label-active");
         likedLabel.classList.add("liked-label-active");
         moviePage.innerHTML = "";
@@ -430,11 +438,13 @@ const loadEvent = () => {
     const page = document.querySelector(".page-label");
     const movieDiv = document.querySelector(".movies-page");
     const pageTitle = document.querySelector(".page-title");
+    const homeLabel = document.querySelector(".home-label");
     
 
     if(model.movies.length === 0){
         updateView();
         detailsPage.style.visibility = "hidden";
+        homeLabel.classList.add("home-label-active");
     }
     pageTitle.addEventListener("click", handlePageTitle);
     movieCategory.addEventListener("change", () => {
