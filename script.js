@@ -113,16 +113,16 @@ function getMovie(id) {
 
 function addToLike(movie) {
     model.likedMovies.push(movie);
-    console.log(model.likedMovies);
+    // console.log(model.likedMovies);
 }
 
 function removeLike(id) {
     const newLikes = model.likedMovies.filter( (movie) => {
         return movie.id != id;
     });
-    console.log("new liked list", newLikes)
+    // console.log("new liked list", newLikes)
     model.likedMovies = newLikes;
-    console.log("remove list",model.likedMovies);
+    // console.log("remove list",model.likedMovies);
 }
 
 // Views
@@ -417,7 +417,7 @@ function handlePageTitle(e) {
         updateView();
     }
     if (target.classList.contains("liked-label")) {
-        console.log(target);
+        // console.log(target);
 
         movieSelector.style.visibility = "hidden";
         pageLabel.style.visibility = "hidden";
