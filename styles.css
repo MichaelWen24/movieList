@@ -190,6 +190,10 @@
     display: block;
   }
 
+  .heart-empty:hover {
+    color: red;
+  }
+
   .heart-filled {
     display: none;
     color: red;

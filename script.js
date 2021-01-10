@@ -125,6 +125,17 @@ function removeLike(id) {
     // console.log("remove list",model.likedMovies);
 }
 
+function isLiked(id) {
+    return model.likedMovies.some((likedMovie) => {
+        if(likedMovie.id == id){
+            return true;
+        }
+        else {
+            return false;
+        }
+    });
+}
+
 // Views
 
 function createMovieDiv(movie) {
@@ -169,13 +180,21 @@ function createMovieDiv(movie) {
 
 function createMoviePage(movies) {
     if(movies && movies.length > 0) {
+        
         const moviesPage = document.querySelector(".movies-page");
         moviesPage.innerHTML = "";
         movies.forEach((movie) => {
-            // if (movie !== null) {
+            const exist = model.likedMovies.some((likedMovie) => {
+                if(likedMovie.id == movie.id){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            });
             const movieContainer = createMovieDiv(movie);
             moviesPage.appendChild(movieContainer);
-            // }
+           
         });
     }
     else {
@@ -380,23 +399,21 @@ function handleLikeIcon(e) {
         const movie = getMovie(movieId);
         const emptyHeart = document.querySelector(".heart-empty");
         const filledHeart = document.querySelector(".heart-filled")
-        const exist = model.likedMovies.some((likedMovie) => {
-            if(likedMovie.id == movieId){
-                return true;
-            }
-            else {
-                return false;
-            }
-        });
-
+        const exist = isLiked(movieId);
         if (model.likedMovies.length === 0){ 
             addToLike(movie);
+            // emptyHeart.style.display = "none";
+            // filledHeart.style.display = "block";
         }
         else if (!exist){
             addToLike(movie);
+            // emptyHeart.style.display = "none";
+            // filledHeart.style.display = "block";
         }
         else {
             removeLike(movieId);   
+            // emptyHeart.style.display = "block";
+            // filledHeart.style.display = "none";
         }
     }
 }
